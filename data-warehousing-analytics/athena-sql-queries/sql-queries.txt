@@ -18,13 +18,14 @@ ORDER BY ticket_count DESC;
 
 
 
--- Q2: Total Tickets By Status
+-- Q2: Total tickets by status
 SELECT
-  COUNT(*) AS total_tickets,
-  SUM(CASE WHEN status = 'Resolved'  THEN 1 ELSE 0 END) AS resolved_tickets,
-  SUM(CASE WHEN status = 'Open'      THEN 1 ELSE 0 END) AS open_tickets,
-  SUM(CASE WHEN status = 'Escalated' THEN 1 ELSE 0 END) AS escalated_tickets
-FROM support_tickets_processed DESC;
+    COUNT(*) AS total_tickets,
+    SUM(CASE WHEN status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets,
+    SUM(CASE WHEN status = 'Open' THEN 1 ELSE 0 END) AS open_tickets,
+    SUM(CASE WHEN status = 'Escalated' THEN 1 ELSE 0 END) AS escalated_tickets
+FROM support_tickets_processed;
+
 
 
 
