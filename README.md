@@ -1,144 +1,244 @@
 # CarePlus Ticket Insights
+
 ### Automated AWS Data Pipeline | Amazon Redshift | Power BI
 
-CarePlus Ticket Insights is an end-to-end cloud analytics project that transforms customer-support ticket data and application logs into a centralized, analytics-ready data warehouse and an interactive Power BI reporting experience.
+CarePlus Ticket Insights is an end-to-end data engineering and business intelligence project that transforms customer-support tickets and application logs into analytics-ready datasets for centralized analysis and interactive reporting.
 
-The project demonstrates practical data engineering and business intelligence capabilities, including multi-source data ingestion, automated ETL orchestration, incremental data loading into Amazon Redshift, analytical data modeling, and dashboard development.
+Built using AWS services, Python, SQL, and Power BI, the project demonstrates data ingestion, event-driven ETL orchestration, data transformation, warehouse loading, analytical modeling, and dashboard development.
+
+**Explore the live dashboard:** [CarePlus Ticket Insights — Power BI](https://app.powerbi.com/view?r=eyJrIjoiOTFkODE1MDAtZTEwMS00OTliLTgzZGEtNmZhNGQ5NzY2YWUxIiwidCI6ImM2ZTU0OWIzLTVmNDUtNDAzMi1hYWU5LWQ0MjQ0ZGM1YjJjNCJ9)
+
+---
 
 ## Project Overview
 
-Support and operations teams need a consistent view of ticket demand, service performance, agent workload, and application health. When ticket records, log files, and reporting data are handled separately, it becomes harder to build a unified view and maintain repeatable reporting workflows.
+Support and operations teams need a consistent view of ticket demand, service performance, agent workload, and application health. When ticket records and application logs are processed separately, producing consistent reports and connecting operational trends becomes more difficult.
 
-This project addresses that challenge by building an AWS-based data pipeline that collects, transforms, and organizes source data for analysis, then presents key operational metrics through Power BI.
+CarePlus Ticket Insights brings these data sources into a common analytics workflow. Source data is ingested into Amazon S3, transformed into structured datasets, prepared for warehouse analysis, and presented through Power BI reports.
+
+The project focuses on two complementary areas:
+
+- **Support analytics:** Ticket volume, ticket status, channel distribution, resolution time, and agent workload.
+- **Operational analytics:** Application events, error signals, response time, CPU utilization, and user-agent activity.
 
 ## Key Contributions
 
-- **Automated data transformation:** Implemented an event-driven transformation workflow using Amazon S3, AWS Lambda, and AWS Glue. Uploading source data to S3 can trigger the relevant processing workflow, reducing the need to start transformation jobs manually.
-- **Incremental data loading into Amazon Redshift:** Implemented an incremental loading approach for the data warehouse so that new data can be processed as part of the ongoing pipeline, rather than relying only on full reloads.
-- **Built a cloud-based ETL pipeline:** Organized source data into raw and processed S3 zones and used AWS Glue to validate, clean, standardize, and transform datasets.
-- **Prepared analytics-ready data:** Stored curated datasets in Parquet format and loaded data into Amazon Redshift Serverless for warehouse analytics.
-- **Developed Power BI reporting:** Built a semantic model and interactive reports for support-ticket performance and application-log monitoring.
-- **Enabled SQL-based analysis:** Used Amazon Athena and Redshift SQL to support ad hoc queries and analytical workflows.
+- **Automated ETL orchestration:** Integrated Amazon S3 events, AWS Lambda, and AWS Glue to initiate ticket-data transformation workflows.
+- **Data ingestion:** Developed Python-based workflows for extracting support-ticket records and collecting daily application logs.
+- **Data transformation:** Implemented cleaning, parsing, standardization, duplicate removal, and data-type conversion for structured datasets.
+- **Analytics-ready storage:** Organized raw and processed data in Amazon S3 and used Parquet for curated datasets.
+- **Cloud data warehousing:** Designed Amazon Redshift tables and loading workflows for centralized analytical queries.
+- **SQL analytics:** Developed Athena and Redshift queries to investigate support demand and application behavior.
+- **Business intelligence:** Built a Power BI report and semantic model with DAX measures for interactive operational reporting.
 
 ## Business Challenge
 
-Support leaders need reliable visibility into ticket volume, status, service performance, agent workload, and the technical signals behind customer interactions. In this project scenario, relevant information was distributed across a support database, daily log files, spreadsheets, and ad hoc SQL analysis.
+Support leaders need reliable visibility into ticket volume, ticket status, agent workload, and application performance. Data spread across operational databases, daily log files, and separate analytical workflows can make reporting fragmented and difficult to maintain.
 
-The goal was to consolidate these sources into a repeatable analytics workflow and make the resulting information easier to explore through a shared reporting layer.
+The project addresses this challenge by organizing support and log data into a repeatable pipeline and presenting the resulting information through a unified reporting experience.
 
-## Solution at a Glance
-
-The solution brings together two analytical perspectives:
-
-- **Support performance:** Ticket volume, status, channel mix, agent workload, resolution time, and interaction count.
-- **Operational health:** Log volume, error signals, CPU utilization, response time, components, and user-agent activity.
-
-The resulting model supports questions such as:
-
-- Which channels generate the most support demand?
-- How many tickets are open, resolved, or escalated?
-- Where are resolution times or agent workloads highest?
-- What application-performance or error patterns appear in the operational logs?
-
-## Architecture
+## Solution Architecture
 
 <p align="center">
-  <img src="aws_project_pipeline.svg" alt="CarePlus Ticket Insights AWS data pipeline architecture" width="100%">
+  <img src="aws_project_pipeline.svg" alt="CarePlus Ticket Insights architecture showing data ingestion, AWS processing, Redshift warehousing, and Power BI reporting" width="100%">
 </p>
 
-### Data Flow
+### End-to-End Data Flow
 
-1. **Ingest source data** — Extract support-ticket records from the operational database and collect daily support-log files.
-2. **Land raw data** — Store incoming data in Amazon S3 raw zones.
-3. **Automate transformation** — Use S3-triggered AWS Lambda orchestration to start AWS Glue jobs that validate, clean, standardize, and transform source datasets.
-4. **Publish curated data** — Write analytics-ready data in Parquet format to S3 processed zones.
-5. **Load the warehouse incrementally** — Load curated data into Amazon Redshift Serverless using the project's incremental data-loading workflow and SQL/`COPY`-based loading patterns.
-6. **Query and analyze** — Use Amazon Redshift for centralized warehouse analysis and Amazon Athena for ad hoc SQL queries.
-7. **Visualize insights** — Connect Power BI to the warehouse and publish a semantic model with interactive reports.
+1. **Ingest source data:** Extract support-ticket records from the operational database and collect application-log files.
+2. **Store raw data:** Upload source data to designated Amazon S3 raw-data locations.
+3. **Trigger processing:** Use Amazon S3 event notifications and AWS Lambda to initiate the relevant processing workflow.
+4. **Transform datasets:** Use AWS Glue and Python-based processing to clean, standardize, and transform source data.
+5. **Publish curated data:** Store processed datasets in Parquet format in the S3 processed-data locations.
+6. **Load warehouse tables:** Use the project's Redshift loading workflows and SQL `COPY` operations to load curated data.
+7. **Query and analyze:** Use Amazon Redshift for warehouse analytics and Amazon Athena for SQL analysis of data in S3.
+8. **Visualize results:** Connect Power BI to the analytical data layer and present metrics through interactive reports.
 
-AWS IAM roles provide service access across the pipeline.
+AWS IAM roles and service permissions support access between the relevant AWS components.
 
-## Live Power BI Dashboard
+## Live Dashboard
 
-Explore the published interactive report: [**Open the CarePlus Ticket Insights Live Dashboard**](https://app.powerbi.com/view?r=eyJrIjoiOTFkODE1MDAtZTEwMS00OTliLTgzZGEtNmZhNGQ5NzY2YWUxIiwidCI6ImM2ZTU0OWIzLTVmNDUtNDAzMi1hYWU5LWQ0MjQ0ZGM1YjJjNCJ9).
+Explore the interactive Power BI report:
 
-## Dashboard Preview
+**[Open the CarePlus Ticket Insights Dashboard](https://app.powerbi.com/view?r=eyJrIjoiOTFkODE1MDAtZTEwMS00OTliLTgzZGEtNmZhNGQ5NzY2YWUxIiwidCI6ImM2ZTU0OWIzLTVmNDUtNDAzMi1hYWU5LWQ0MjQ0ZGM1YjJjNCJ9)**
 
-### Support Tickets
+### Support Tickets Dashboard
 
 <p align="center">
-  <img src="screenshots/Screenshot%202026-10-29%20205104.png" alt="CarePlus support tickets dashboard" width="100%">
+  <img src="screenshots/Screenshot%202026-10-29%20205104.png" alt="Power BI dashboard for support ticket analytics" width="100%">
 </p>
 
-### Support Logs
+This report supports analysis of ticket volume, status distribution, channel mix, and support performance.
+
+### Support Logs Dashboard
 
 <p align="center">
-  <img src="screenshots/Screenshot%202026-10-29%20205118.png" alt="CarePlus support logs dashboard" width="100%">
+  <img src="screenshots/Screenshot%202026-10-29%20205118.png" alt="Power BI dashboard for application log and system performance analytics" width="100%">
 </p>
+
+This report supports analysis of log activity, error signals, response time, CPU utilization, and application behavior.
 
 ## Data Model and Analytical Measures
 
-The Power BI semantic model links two fact tables through shared ticket and date dimensions.
+The Power BI semantic model brings together support-ticket and application-log data using shared ticket and date dimensions.
 
-| Table | Purpose | Example fields |
+| Table | Purpose | Example attributes |
 |---|---|---|
-| `support_tickets` | Customer-support case activity | Ticket ID, creation and resolution timestamps, agent, priority, channel, status, category, interactions |
-| `support_logs` | Application and operational events | Event timestamp, component, log level, ticket/session IDs, response time, CPU, error flag, user agent |
-| `dim_tickets` | Shared ticket key | Ticket ID across ticket and log data |
-| `dim_date` | Consistent date filtering and trends | Date, year, month, day, weekday |
+| `support_tickets` | Support case activity | Ticket ID, creation and resolution timestamps, agent, priority, channel, status, category, interactions |
+| `support_logs` | Application and operational events | Timestamp, component, log level, ticket/session IDs, response time, CPU, error flag, user agent |
+| `dim_tickets` | Shared ticket identifier | Ticket ID |
+| `dim_date` | Consistent date analysis | Date, year, month, day, weekday |
 
-Key DAX measures include total, resolved, open, and escalated tickets; average resolution time; average interactions; active agents; total logs; distinct logged tickets; average CPU usage; and average response time.
+The model includes measures for total, resolved, open, and escalated tickets; average resolution time; average interactions; active agents; total log events; distinct tickets represented in logs; average CPU utilization; and average response time.
+
+Actual metric values depend on the loaded data and the definitions implemented in the semantic model.
+
+## Example Analytical Questions
+
+The project's SQL and reporting layers are designed to explore questions such as:
+
+- Which communication channels receive the most support tickets?
+- What proportion of tickets are resolved, open, or escalated?
+- How does ticket creation volume change over time?
+- Which user agents generate the most application events?
+- How many events are recorded at the DEBUG level?
+- How does average CPU utilization vary by user agent?
+- What patterns appear in response times and application errors?
+
+These analyses can help support teams investigate operational trends and identify areas for further review.
 
 ## Technology Stack
 
-| Area | Technologies and practices |
+| Area | Technologies |
 |---|---|
-| Data ingestion | Python notebooks, database extraction, file-based log ingestion, incremental date tracking |
-| Workflow automation | Amazon S3 event notifications, AWS Lambda, AWS Glue jobs |
-| Data transformation | AWS Glue, PySpark, validation and standardization |
-| Data lake storage | Amazon S3, raw and processed zones, Apache Parquet |
-| Data warehousing | Amazon Redshift Serverless, incremental data loading, SQL table design, `COPY` loading |
-| Query and analysis | Amazon Athena, SQL |
-| Business intelligence | Power BI Project (`.pbip`), semantic modeling, DAX, report design |
-| Security and configuration | AWS IAM roles, environment-based configuration, excluded credentials and local artifacts |
+| Programming | Python, SQL |
+| Data ingestion | Python notebooks, database extraction, file-based log ingestion |
+| Workflow orchestration | Amazon S3 event notifications, AWS Lambda, AWS Glue |
+| Data transformation | AWS Glue, PySpark, Python, pandas |
+| Data lake | Amazon S3, raw and processed data zones |
+| File format | Apache Parquet |
+| Data warehouse | Amazon Redshift Serverless |
+| Query engine | Amazon Athena |
+| Business intelligence | Power BI, DAX, semantic modeling, `.pbip` |
+| Security and configuration | AWS IAM, environment-based configuration |
 
 ## Repository Structure
 
 ```text
 .
-|- data-ingestion/
-|  |- support-tickets/              # Database extraction and source schema
-|  `- support-logs/                 # Daily log ingestion and tracking
-|- data-transformation/
-|  |- support-tickets-transformation/
-|  `- support-log-transformation/   # ETL workflows
-|- data-warehousing-analytics/
-|  |- redshift-setup/               # DDL and Redshift loading notebooks
-|  `- athena-sql-queries/           # Example analytical SQL
-|- careplus ticket insight.SemanticModel/  # Power BI model and DAX measures
-|- careplus ticket insight.Report/          # Power BI report definition
-|- screenshots/                     # Dashboard previews
-`- aws_project_pipeline.svg         # Solution architecture
+├── data-ingestion/
+│   ├── support-tickets/
+│   ├── support-logs/
+│   └── meta_data.txt
+├── data-transformation/
+│   ├── support-tickets-transformation/
+│   └── support-log-transformation/
+├── data-warehousing-analytics/
+│   ├── redshift-setup/
+│   └── athena-sql-queries/
+├── careplus ticket insight.SemanticModel/
+├── careplus ticket insight.Report/
+├── screenshots/
+├── aws_project_pipeline.svg
+└── README.md
 ```
+
+Refer to the repository for the complete set of notebooks, SQL scripts, report assets, and configuration files.
 
 ## Getting Started
 
-1. Clone this repository.
-2. Copy `.env.example` to `.env` and configure the local database, S3, and Redshift settings. Do not commit `.env`.
-3. Configure AWS authentication using an AWS profile or IAM role.
-4. Replace placeholder S3 bucket, Redshift endpoint, and IAM role references in notebooks and SQL scripts with resources from your AWS account.
-5. Run the ingestion and transformation notebooks, and configure the S3 event notification and Lambda permissions required for automated processing.
-6. Create and load the Redshift tables using the resources in `data-warehousing-analytics/redshift-setup/`.
-7. Open `careplus ticket insight.pbip` in Power BI Desktop, update the Redshift connection, and refresh the semantic model.
+### Prerequisites
 
-Exact execution steps may vary depending on the AWS resources and configuration used in your environment.
+- An AWS account with appropriate service permissions.
+- Python and Jupyter Notebook.
+- An operational database containing support-ticket data, or an equivalent approved source.
+- An Amazon S3 bucket.
+- AWS Glue and AWS Lambda configured for the relevant processing workflows.
+- Amazon Athena configured to query the required S3 data.
+- Amazon Redshift Serverless with the required database objects and access permissions.
+- Power BI Desktop for inspecting or modifying the report.
 
-## Privacy and Configuration
+### Setup and Configuration
 
-This repository is intended for portfolio sharing. Credentials, local environment files, Power BI workspace state, generated Parquet files, and operational log samples are excluded by `.gitignore`. Screenshots and sample SQL use anonymized agent labels. Use only approved, non-sensitive data when adapting the project.
+1. **Clone the repository.**
 
-## Notes for Reviewers
+   ```bash
+   git clone https://github.com/PrashantDes/careplus-ticket-insights.git
+   cd careplus-ticket-insights
+   ```
 
-CarePlus Ticket Insights is a portfolio implementation based on a realistic support-analytics use case. It demonstrates an end-to-end workflow spanning ingestion, automated transformation, incremental warehouse loading, SQL analytics, and BI reporting.
+2. **Configure the environment.** Review the ingestion notebooks and any environment-variable or configuration requirements. If an `.env.example` file is present, copy it to `.env` and populate the required values.
 
-Infrastructure identifiers in the repository are placeholders and must be replaced with resources from the target AWS account before execution.
+3. **Configure AWS access.** Set up an AWS profile or execution role with the required permissions for S3, Lambda, Glue, and the other services used by the workflow.
+
+4. **Update resource references.** Replace placeholder bucket names, AWS account identifiers, IAM role ARNs, database settings, and regional settings in notebooks and SQL scripts.
+
+5. **Run ingestion workflows.** Configure the source connection and ingest support-ticket records and application logs into the appropriate S3 raw-data locations.
+
+6. **Configure automated processing.** Set up the relevant Lambda functions, S3 event notifications, Glue jobs, and job arguments. Ensure that the argument names used by Lambda match those expected by each Glue job.
+
+7. **Transform the data.** Run the transformation workflows and verify that the processed datasets are written to the expected S3 prefixes.
+
+8. **Set up the warehouse.** Execute the Redshift DDL scripts, configure the appropriate IAM role for S3 access, and run the loading workflows.
+
+9. **Configure analytics.** Run the Athena SQL queries and validate the results against the source and processed datasets.
+
+10. **Open the Power BI project.** Open the `.pbip` project in Power BI Desktop, configure the warehouse connection and credentials, and refresh the semantic model.
+
+Exact setup requirements depend on the AWS resources, data sources, and configuration used in your environment.
+
+## Data Quality and Reliability
+
+The transformation workflows include data-cleaning and standardization operations. For reliable analytical results, the pipeline should also be validated for:
+
+- Missing or malformed fields.
+- Invalid timestamps and numeric values.
+- Unexpected ticket statuses or log levels.
+- Differences between source and processed record counts.
+- Duplicate records after retries or repeated event delivery.
+- Failed transformation jobs and unsuccessful warehouse loads.
+- Consistency between warehouse query results and Power BI measures.
+
+The presence of these validation steps should be confirmed in the deployed workflow before treating the pipeline as production-ready.
+
+## Security and Privacy
+
+- Do not commit AWS credentials, access keys, database passwords, or other secrets.
+- Keep local environment files and sensitive operational data out of version control.
+- Use IAM roles and least-privilege permissions where possible.
+- Replace infrastructure placeholders before execution.
+- Use approved, anonymized, or synthetic data for portfolio demonstrations.
+- Review published dashboard access settings before sharing the report publicly.
+
+## Future Improvements
+
+- Replace local date tracking with durable, restart-safe ingestion state.
+- Handle empty source dates without blocking subsequent ingestion.
+- Make processing idempotent to safely handle retries and duplicate S3 events.
+- Implement staging and deduplication strategies for reliable incremental Redshift loading.
+- Add automated schema and data-quality validation.
+- Add monitoring, structured error logging, and failure notifications.
+- Create repeatable deployment instructions and automated tests.
+- Document verified execution results and measurable analytical findings.
+
+## Skills Demonstrated
+
+- Cloud data engineering with AWS.
+- Python-based data ingestion and transformation.
+- Event-driven ETL orchestration.
+- Data lake design and Parquet-based storage.
+- SQL analytics and cloud data warehousing.
+- Analytical data modeling and DAX measures.
+- Power BI report development.
+- Data quality, security, and pipeline reliability considerations.
+
+## Author
+
+**Prashant Lodhi**
+
+- GitHub: [PrashantDes](https://github.com/PrashantDes)
+- Project repository: [CarePlus Ticket Insights](https://github.com/PrashantDes/careplus-ticket-insights)
+
+---
+
+*CarePlus Ticket Insights is a portfolio project demonstrating an end-to-end support analytics workflow. Infrastructure identifiers are environment-specific placeholders, and deployment, reliability, and business outcomes should be validated in the target environment.*
