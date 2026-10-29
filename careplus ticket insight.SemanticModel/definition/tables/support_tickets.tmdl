@@ -1,0 +1,103 @@
+table support_tickets
+	lineageTag: 8d5ce53a-75ce-40ff-9db6-d3887262af43
+
+	column ticket_id
+		dataType: string
+		lineageTag: cb352a6f-fafa-4b41-92aa-aa730c1f91fe
+		summarizeBy: none
+		sourceColumn: ticket_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b0090324-8752-461f-bfe5-e5e25d0910bd
+		summarizeBy: none
+		sourceColumn: created_at
+
+		variation Variation
+			isDefault
+			relationship: 59f977e4-c916-4b32-ab34-7c8ec56e69d5
+			defaultHierarchy: LocalDateTable_e9d5b81c-329f-4f3d-a0dd-7acf388e29a8.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column resolved_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f9f80cd9-474a-467a-b45e-4eb043debc5a
+		summarizeBy: none
+		sourceColumn: resolved_at
+
+		variation Variation
+			isDefault
+			relationship: 3905d7ec-56dd-4dbf-87b2-7da221512069
+			defaultHierarchy: LocalDateTable_4c5b7276-103e-42e1-aef5-143529f95c95.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Agent
+		dataType: string
+		lineageTag: c8166bbb-41ab-414c-b778-83677f69f07a
+		summarizeBy: none
+		sourceColumn: Agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column priority
+		dataType: string
+		lineageTag: f621cef7-03ba-4763-a565-0263006bdbaf
+		summarizeBy: none
+		sourceColumn: priority
+
+		annotation SummarizationSetBy = Automatic
+
+	column num_interactions
+		dataType: int64
+		formatString: 0
+		lineageTag: af06c0c2-6d8b-4ca3-b79e-cd47bff41fe4
+		summarizeBy: sum
+		sourceColumn: num_interactions
+
+		annotation SummarizationSetBy = Automatic
+
+	column issue_category
+		dataType: string
+		lineageTag: 118c8c50-6f9e-49fd-b65b-4b2fcd49009b
+		summarizeBy: none
+		sourceColumn: issue_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel
+		dataType: string
+		lineageTag: 22860b2b-2849-4a53-9142-a450b8d6718c
+		summarizeBy: none
+		sourceColumn: channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: 808f0dcc-9f07-46c1-8853-6591302e6c09
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition support_tickets = m
+		mode: import
+		source =
+				let
+				  Source = AmazonRedshift.Database("YOUR_REDSHIFT_WORKGROUP_ENDPOINT:5439", "careplus_db", [ProviderName = null, BatchSize = null]),
+				  #"Navigation 1" = Source{[Name = "public"]}[Data],
+				  #"Navigation 2" = #"Navigation 1"{[Name = "support_tickets"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(#"Navigation 2",{{"agent", "Agent"}}),
+				    Agents = List.Sort(List.Distinct(#"Renamed Columns"[Agent])),
+				    #"Anonymized Agents" = Table.TransformColumns(#"Renamed Columns", {{"Agent", each if _ = null then "Unassigned" else "Agent " & Text.PadStart(Text.From(List.PositionOf(Agents, _) + 1), 2, "0"), type text}})
+				in
+				  #"Anonymized Agents"
+
+	annotation PBI_ResultType = Table
+

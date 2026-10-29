@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "careplus ticket insight"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7da68c7c-4c98-44d9-a160-8f372c7fa00f"
+  }
+}

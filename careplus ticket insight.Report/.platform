@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "careplus ticket insight"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "72853bf5-6932-45bd-b4f0-d23f929ddc6b"
+  }
+}

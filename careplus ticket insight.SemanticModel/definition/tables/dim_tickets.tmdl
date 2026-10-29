@@ -1,0 +1,12 @@
+table dim_tickets
+	lineageTag: eeac33aa-e3af-45a3-9542-f0c9d1158778
+
+	column ticket_id
+		lineageTag: 1aa6fee4-d136-4a86-b8cd-93f3974de767
+		isNameInferred
+		sourceColumn: [ticket_id]
+
+	partition dim_tickets = calculated
+		mode: import
+		source = DISTINCT(UNION(SELECTCOLUMNS(support_tickets, "ticket_id", support_tickets[ticket_id]), SELECTCOLUMNS(support_logs, "ticket_id", support_logs[ticket_id])))
+

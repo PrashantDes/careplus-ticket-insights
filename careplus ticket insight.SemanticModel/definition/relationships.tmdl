@@ -1,0 +1,33 @@
+relationship 4442fe0c-b1a5-40c1-a17e-00cd2ff2fef8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: support_logs.timestamp
+	toColumn: LocalDateTable_3a8a8f34-4629-4e30-bd0a-610b7ffdc2d0.Date
+
+relationship 59f977e4-c916-4b32-ab34-7c8ec56e69d5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: support_tickets.created_at
+	toColumn: LocalDateTable_e9d5b81c-329f-4f3d-a0dd-7acf388e29a8.Date
+
+relationship 3905d7ec-56dd-4dbf-87b2-7da221512069
+	joinOnDateBehavior: datePartOnly
+	fromColumn: support_tickets.resolved_at
+	toColumn: LocalDateTable_4c5b7276-103e-42e1-aef5-143529f95c95.Date
+
+relationship support_tickets_ticket_id_dim_tickets
+	fromColumn: support_tickets.ticket_id
+	toColumn: dim_tickets.ticket_id
+
+relationship support_logs_ticket_id_dim_tickets
+	fromColumn: support_logs.ticket_id
+	toColumn: dim_tickets.ticket_id
+
+relationship support_tickets_created_at_dim_date
+	joinOnDateBehavior: datePartOnly
+	fromColumn: support_tickets.created_at
+	toColumn: dim_date.Date
+
+relationship support_logs_timestamp_dim_date
+	joinOnDateBehavior: datePartOnly
+	fromColumn: support_logs.timestamp
+	toColumn: dim_date.Date
+

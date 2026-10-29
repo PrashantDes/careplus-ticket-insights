@@ -1,0 +1,19 @@
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# Local credentials and environment configuration
+.env
+.env.*
+!.env.example
+
+# Notebook runtime artifacts
+**/.ipynb_checkpoints/
+__pycache__/
+
+# Local data and generated outputs
+**/day-wise-logs-data/
+*.log
+*.parquet
+
+# Local Power BI workspace state
+**/.pbi/

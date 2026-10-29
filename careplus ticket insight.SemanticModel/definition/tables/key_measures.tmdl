@@ -1,0 +1,61 @@
+table key_measures
+	lineageTag: a8341f4f-a340-416d-b3f1-2995d62ef373
+
+	measure total_tickets = DISTINCTCOUNT(support_tickets[ticket_id])
+		formatString: #,0
+		lineageTag: 3204aeee-0281-404e-b6d8-bbd793b9488d
+
+	measure 'Resolved Tickets' = CALCULATE([total_tickets], support_tickets[status] = "Resolved")
+		formatString: #,0
+		lineageTag: a8832645-b35b-46fe-b338-a84119e6c13d
+
+	measure 'Total Tickets Resolved' = [Resolved Tickets]
+		formatString: #,0
+		lineageTag: 87dfc314-a04d-434b-a427-ae99985402f0
+
+	measure 'Open Tickets' = CALCULATE([total_tickets], support_tickets[status] = "Open")
+		formatString: #,0
+		lineageTag: afc5409d-d8f2-477a-a9b2-889184ab081f
+
+	measure 'Escalated Tickets' = CALCULATE([total_tickets], support_tickets[status] = "Escalated")
+		formatString: #,0
+		lineageTag: 144e03aa-2c93-461c-89d9-fe791cdeaa25
+
+	measure 'Total Agents' = DISTINCTCOUNT(support_tickets[Agent])
+		formatString: #,0
+		lineageTag: 52330921-2cc9-4455-b680-b27d3a5db9bb
+
+	measure 'Avg Interactions' = AVERAGE(support_tickets[num_interactions])
+		formatString: #,0.00
+		lineageTag: a8d51272-4542-47de-8f42-52ca1e95f68f
+
+	measure 'avg resolution minutes' = AVERAGEX(support_tickets, DATEDIFF(support_tickets[created_at], support_tickets[resolved_at], MINUTE))
+		formatString: #,0.00
+		lineageTag: 491d7eb7-113c-422e-9b8d-0a3d38a3761d
+
+	measure 'Total Logs' = COUNTROWS(support_logs)
+		formatString: #,0
+		lineageTag: 60c4a961-656d-4c70-b873-5695024cef16
+
+	measure 'Logged Tickets' = DISTINCTCOUNT(support_logs[ticket_id])
+		formatString: #,0
+		lineageTag: 28590422-6ef9-4f8e-8736-91c3d3859220
+
+	measure 'Avg CPU (%)' = AVERAGE(support_logs[cpu])
+		formatString: #,0.00
+		lineageTag: a75f0946-fe0c-49cb-bdcb-67c5f4c97fb7
+
+	measure 'Avg Response (ms)' = AVERAGE(support_logs[response_time])
+		formatString: #,0
+		lineageTag: 412816df-659a-4b1b-9944-70d902a473c5
+
+	column Value
+		isHidden
+		lineageTag: ae8b1698-b03b-4ccb-b544-7b9ff5569807
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition key_measures = calculated
+		mode: import
+		source = ROW("Value", BLANK())
+

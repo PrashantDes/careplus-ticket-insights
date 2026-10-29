@@ -1,0 +1,56 @@
+table dim_date
+	lineageTag: 850bc0bd-77da-43f4-907c-915f45679118
+	dataCategory: Time
+
+	column Date
+		isUnique
+		formatString: dddd, MMMM dd, yyyy
+		lineageTag: 9c865257-84eb-4b40-989c-bff104c60f4b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+	column Year = YEAR(dim_date[Date])
+		dataType: int64
+		formatString: 0
+		lineageTag: 75924ddc-b0ce-4bcc-8da3-989a3cddfdb7
+		summarizeBy: none
+
+	column 'Month Number' = MONTH(dim_date[Date])
+		dataType: int64
+		formatString: 0
+		lineageTag: 0177708a-cf57-4e02-b48e-0c51b85b45e2
+		summarizeBy: none
+
+	column Month = FORMAT(dim_date[Date], "MMMM")
+		dataType: string
+		lineageTag: f25c2e36-5ecf-4415-8a47-d3c694cebc19
+		summarizeBy: none
+		sortByColumn: 'Month Number'
+
+	column Day = DAY(dim_date[Date])
+		dataType: int64
+		formatString: 0
+		lineageTag: 51762ede-d9ed-4850-83c4-47969ed67516
+		summarizeBy: none
+
+	column 'Day of Week Number' = WEEKDAY(dim_date[Date], 2)
+		dataType: int64
+		formatString: 0
+		lineageTag: df523f44-5919-4971-8c20-21e9f0b88b2c
+		summarizeBy: none
+
+	column 'Day Name' = FORMAT(dim_date[Date], "dddd")
+		dataType: string
+		lineageTag: 9373d495-8365-4bf5-8415-8b6f1d233b62
+		summarizeBy: none
+		sortByColumn: 'Day of Week Number'
+
+	partition dim_date = calculated
+		mode: import
+		source =
+				VAR _start = MIN(MIN(support_tickets[created_at]), MIN(support_logs[timestamp]))
+				VAR _end = MAX(MAX(support_tickets[resolved_at]), MAX(support_logs[timestamp]))
+				RETURN
+				CALENDAR(DATE(YEAR(_start), MONTH(_start), DAY(_start)), DATE(YEAR(_end), MONTH(_end), DAY(_end)))
+

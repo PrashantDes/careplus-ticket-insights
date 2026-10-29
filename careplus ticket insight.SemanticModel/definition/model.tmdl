@@ -1,0 +1,27 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["support_logs","support_tickets"]
+
+annotation PBI_ProTooling = ["DevMode","MCP-PBIModeling"]
+
+ref table support_logs
+ref table DateTableTemplate_f15713a1-0dd1-4f01-b792-1f28ca35e683
+ref table LocalDateTable_3a8a8f34-4629-4e30-bd0a-610b7ffdc2d0
+ref table support_tickets
+ref table LocalDateTable_e9d5b81c-329f-4f3d-a0dd-7acf388e29a8
+ref table LocalDateTable_4c5b7276-103e-42e1-aef5-143529f95c95
+ref table dim_date
+ref table dim_tickets
+ref table key_measures
+
+ref cultureInfo en-US
+

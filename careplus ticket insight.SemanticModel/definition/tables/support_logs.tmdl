@@ -1,0 +1,152 @@
+table support_logs
+	lineageTag: eb5fa65d-935d-4080-ad7d-2089b5303638
+
+	column timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d19e5b71-ffd9-44fc-a668-da8f40369883
+		summarizeBy: none
+		sourceColumn: timestamp
+
+		variation Variation
+			isDefault
+			relationship: 4442fe0c-b1a5-40c1-a17e-00cd2ff2fef8
+			defaultHierarchy: LocalDateTable_3a8a8f34-4629-4e30-bd0a-610b7ffdc2d0.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column log_level
+		dataType: string
+		lineageTag: 4514e7bb-307b-45e9-9f3d-027f8ca41a8e
+		summarizeBy: none
+		sourceColumn: log_level
+
+		annotation SummarizationSetBy = Automatic
+
+	column component
+		dataType: string
+		lineageTag: 954c96ee-1c4e-4f61-8dd4-03913d1d9c39
+		summarizeBy: none
+		sourceColumn: component
+
+		annotation SummarizationSetBy = Automatic
+
+	column ticket_id
+		dataType: string
+		lineageTag: 754ca161-bfa4-40f4-a6d8-3f82947e0f04
+		summarizeBy: none
+		sourceColumn: ticket_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column session_id
+		dataType: string
+		lineageTag: 615851c8-4210-40b4-83a2-0bbe05e0dab8
+		summarizeBy: none
+		sourceColumn: session_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column ip
+		dataType: string
+		lineageTag: 33cc497f-ada4-410b-88cf-6d5fe3b64266
+		summarizeBy: none
+		sourceColumn: ip
+
+		annotation SummarizationSetBy = Automatic
+
+	column response_time
+		dataType: int64
+		formatString: 0
+		lineageTag: fc4a7899-aac0-4a2c-b152-3f6f3bcbcd61
+		summarizeBy: sum
+		sourceColumn: response_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column cpu
+		dataType: double
+		lineageTag: a3184f76-28e4-4467-b377-f6fb90920765
+		summarizeBy: sum
+		sourceColumn: cpu
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column event_type
+		dataType: string
+		lineageTag: 54dde83d-f974-4466-8f02-09bb525acd71
+		summarizeBy: none
+		sourceColumn: event_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column error
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: c6422e5a-da23-41b2-b6e2-27acfb21b59d
+		summarizeBy: none
+		sourceColumn: error
+
+		annotation SummarizationSetBy = Automatic
+
+	column user_agent
+		dataType: string
+		lineageTag: 068e432a-da84-46ef-bddd-37e70937490c
+		summarizeBy: none
+		sourceColumn: user_agent
+
+		annotation SummarizationSetBy = Automatic
+
+	column message
+		dataType: string
+		lineageTag: 4d5931ee-db99-4ac1-9a63-0e9abb09fcaf
+		summarizeBy: none
+		sourceColumn: message
+
+		annotation SummarizationSetBy = Automatic
+
+	column debug
+		dataType: string
+		lineageTag: 3354f86b-a54a-4436-a49c-7911f5823d95
+		summarizeBy: none
+		sourceColumn: debug
+
+		annotation SummarizationSetBy = Automatic
+
+	column response_time_range =
+			SWITCH(TRUE(),
+			    support_logs[response_time] < 500, "0-499 ms",
+			    support_logs[response_time] < 1000, "500-999 ms",
+			    support_logs[response_time] < 1500, "1000-1499 ms",
+			    "1500+ ms")
+		dataType: string
+		lineageTag: 539ee27f-7efb-47ac-aaf4-4bae19248d37
+		summarizeBy: none
+		sortByColumn: response_time_range_sort
+
+	column response_time_range_sort =
+			SWITCH(TRUE(),
+			    support_logs[response_time] < 500, 1,
+			    support_logs[response_time] < 1000, 2,
+			    support_logs[response_time] < 1500, 3,
+			    4)
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 39fd1232-6b83-4fb2-a27b-16bf326bf334
+		summarizeBy: none
+
+	partition support_logs = m
+		mode: import
+		source =
+				let
+				  Source = AmazonRedshift.Database("YOUR_REDSHIFT_WORKGROUP_ENDPOINT:5439", "careplus_db", [ProviderName = null, BatchSize = null]),
+				  #"Navigation 1" = Source{[Name = "public"]}[Data],
+				  #"Navigation 2" = #"Navigation 1"{[Name = "support_logs"]}[Data]
+				in
+				  #"Navigation 2"
+
+	annotation PBI_ResultType = Table
+
