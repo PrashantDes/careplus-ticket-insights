@@ -167,7 +167,7 @@ Refer to the repository for the complete set of notebooks, SQL scripts, report a
    cd careplus-ticket-insights
    ```
 
-2. **Configure the environment.** Review the ingestion notebooks and any environment-variable or configuration requirements. If an `.env.example` file is present, copy it to `.env` and populate the required values.
+2. **Configure the environment.** Copy the root `.env.example` file to `.env` and populate the required values. The `.env` file is excluded from Git; never commit credentials.
 
 3. **Configure AWS access.** Set up an AWS profile or execution role with the required permissions for S3, Lambda, Glue, and the other services used by the workflow.
 
@@ -204,7 +204,8 @@ The presence of these validation steps should be confirmed in the deployed workf
 ## Security and Privacy
 
 - Do not commit AWS credentials, access keys, database passwords, or other secrets.
-- Keep local environment files and sensitive operational data out of version control.
+- Keep local environment files and sensitive operational data out of version control. The `.gitignore` excludes `.env` files (except `.env.example`), notebook checkpoints, local Power BI state, raw log samples, and generated Parquet files.
+- The local support database seed file at `data-ingestion/support-tickets/careplus_support_db.sql` is intentionally excluded from Git. Use an approved database or synthetic data when setting up the project.
 - Use IAM roles and least-privilege permissions where possible.
 - Replace infrastructure placeholders before execution.
 - Use approved, anonymized, or synthetic data for portfolio demonstrations.

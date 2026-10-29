@@ -1,6 +1,3 @@
-**/.pbi/localSettings.json
-**/.pbi/cache.abf
-
 # Local credentials and environment configuration
 .env
 .env.*
@@ -10,11 +7,11 @@
 **/.ipynb_checkpoints/
 __pycache__/
 
-# Local data and generated outputs
+# Local source data and generated datasets
+/data-ingestion/support-tickets/careplus_support_db.sql
 **/day-wise-logs-data/
 *.log
 *.parquet
-/data-ingestion/support-tickets/careplus_support_db.sql
 
 # Local Power BI workspace state
 **/.pbi/
