@@ -14,6 +14,7 @@ __pycache__/
 **/day-wise-logs-data/
 *.log
 *.parquet
+/data-ingestion/support-tickets/careplus_support_db.sql
 
 # Local Power BI workspace state
 **/.pbi/
