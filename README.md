@@ -237,9 +237,6 @@ The presence of these validation steps should be confirmed in the deployed workf
 
 **Prashant Lodhi**
 
-- GitHub: [PrashantDes](https://github.com/PrashantDes)
-- Project repository: [CarePlus Ticket Insights](https://github.com/PrashantDes/careplus-ticket-insights)
-
 ---
 
 *CarePlus Ticket Insights is a portfolio project demonstrating an end-to-end support analytics workflow. Infrastructure identifiers are environment-specific placeholders, and deployment, reliability, and business outcomes should be validated in the target environment.*
